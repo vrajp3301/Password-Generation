@@ -2,8 +2,21 @@ import hashlib
 import secrets
 
 def generate_password(length=12):
-    alphabet = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()_-+=~"
-    return ''.join(secrets.choice(alphabet) for _ in range(length))
+    lowercase_letters = string.ascii_lowercase
+    uppercase_letters = string.ascii_uppercase
+    numbers = string.digits
+    special_characters = "!@#$%^&*()_-+=~"
+
+    # Ensure at least one lowercase, one uppercase, one number, and one special character
+    password = (
+        secrets.choice(lowercase_letters) +
+        secrets.choice(uppercase_letters) +
+        secrets.choice(numbers) +
+        secrets.choice(special_characters) +
+        ''.join(secrets.choice(string.ascii_letters + string.digits + special_characters) for _ in range(length - 4))
+    )
+    password = ''.join(secrets.sample(password, len(password)))
+    return password
 
 def hash_password(password, algorithm='sha256'):
     if algorithm not in hashlib.algorithms_available:
